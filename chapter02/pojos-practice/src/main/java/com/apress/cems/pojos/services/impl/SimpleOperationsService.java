@@ -67,7 +67,8 @@ public class SimpleOperationsService implements OperationsService {
         // create a criminal case instance
         CriminalCase criminalCase = new CriminalCase();
         // TODO 2. set fields; use ifPresent(..) to set(or not) the leadDetective field
-        leadDetective.ifPresent(d -> criminalCase.setLeadDetective(d));
+        leadDetective.ifPresent(d -> criminalCase.setLeadInvestigator(d));
+        criminalCaseRepo.save(criminalCase);
         
         evidenceMap.forEach((ev, storageName) -> {
             // TODO 3. retrieve storage, throw ServiceException if not found
@@ -75,10 +76,10 @@ public class SimpleOperationsService implements OperationsService {
             // TODO 4. if storage is found, link it to the evidence and add evidence to the case
             ev.setStorage(storage);
             criminalCase.addEvidence(ev);
+            evidenceRepo.save(ev);
         });
 
         // TODO 5. save the criminal case instance
-        criminalCaseRepo.save(criminalCase);
         return criminalCase;
     }
 
